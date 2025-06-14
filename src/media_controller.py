@@ -69,6 +69,9 @@ class MediaController:
         """Setup platform-specific media control"""
         self.platform = platform.system()
         
+        # Initialize common attributes
+        self.media_keys = {}
+        
         if self.platform == "Windows" and WINDOWS_AVAILABLE:
             self.setup_windows()
         elif self.platform == "Darwin":  # macOS
