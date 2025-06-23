@@ -174,10 +174,29 @@ class GestureClassifier:
         y_pred_classes = np.argmax(y_pred, axis=1)
         
         print("\nClassification Report:")
-        print(classification_report(
-            y_test, y_pred_classes, 
-            target_names=self.label_encoder.classes_
-        ))
+        try:
+            # Get the actual class names present in the data
+            unique_classes = sorted(set(y_test))
+            class_names = [self.label_encoder.classes_[i] for i in unique_classes]
+            
+            print(classification_report(
+                y_test, y_pred_classes, 
+                labels=unique_classes,
+                target_names=class_names
+            ))
+            
+            # Show per-gesture accuracy
+            print("\n🎯 Per-Gesture Accuracy:")
+            for class_idx in unique_classes:
+                class_name = self.label_encoder.classes_[class_idx]
+                mask = y_test == class_idx
+                if np.any(mask):
+                    accuracy = np.mean(y_pred_classes[mask] == y_test[mask])
+                    print(f"  {class_name}: {accuracy:.4f} ({accuracy*100:.1f}%)")
+                    
+        except Exception as e:
+            print(f"Classification report error (non-critical): {e}")
+            print("✅ Model training completed successfully despite report error!")
         
         # Save the scaler
         scaler_path = os.path.join(MODELS_DIR, "input_scaler.pkl")
