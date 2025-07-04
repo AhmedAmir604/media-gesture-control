@@ -1,15 +1,11 @@
 #!/usr/bin/env python3
-"""
-Gesture Media Control - Main Entry Point
-A deep learning-powered application for controlling media playback using hand gestures.
-"""
+
 
 import sys
 import os
 import argparse
 from pathlib import Path
 
-# Add src directory to Python path
 current_dir = Path(__file__).parent
 src_dir = current_dir / "src"
 sys.path.insert(0, str(src_dir))
